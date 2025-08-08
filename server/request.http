@@ -1,0 +1,9 @@
+POST http://localhost:5000/api/recipes
+Content-Type: application/json
+
+{
+  "title": "New Recipe",
+  "photo": "https://example.com/photo.jpg",
+  "ingredients": "1 egg, 2 cups flour...",
+  "instructions": "Mix ingredients and bake."
+}
