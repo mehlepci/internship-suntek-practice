@@ -20,14 +20,18 @@ export default function EditRecipeForm({ recipe, onSave, onCancel }) {
     try {
       const response = await fetch(`http://localhost:5000/api/recipes/${recipe._id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(updatedRecipe),
       });
 
-      if (!response.ok) throw new Error('Failed to update recipe');
+      if (!response.ok) {
+        throw new Error('Failed to update recipe');
+      }
 
       const data = await response.json();
-      onSave(data);
+      onSave(data); // Update in parent
     } catch (error) {
       console.error(error);
       alert('Failed to update recipe');
