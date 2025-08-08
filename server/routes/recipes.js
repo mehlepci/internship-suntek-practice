@@ -15,11 +15,11 @@ router.post('/', async (req, res) => {
   res.status(201).json(saved);
 });
 
-// PUT update recipe
 router.put('/:id', async (req, res) => {
   const updated = await Recipe.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json(updated);
 });
+
 
 // DELETE recipe
 router.delete('/:id', async (req, res) => {
