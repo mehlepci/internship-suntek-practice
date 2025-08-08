@@ -58,7 +58,7 @@ export default function AddRecipe({ onAdd }) {
 
       <button
         type="submit"
-        className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition"
+        className="w-full bg-pink-600 text-white py-2 rounded hover:bg-pink-700 transition"
       >
         Add Recipe
       </button>
