@@ -3,46 +3,54 @@ import Header from './components/Header.jsx';
 import RecipeList from './components/RecipeList.jsx';
 import AddRecipe from './components/AddRecipe.jsx';
 
-const API_URL = 'http://localhost:5000/api/recipes';
-
 export default function App() {
   const [recipes, setRecipes] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
-    fetch(API_URL)
+    fetch('http://localhost:5000/api/recipes')
       .then(res => res.json())
       .then(data => setRecipes(data))
-      .catch(err => console.error('Fetch error:', err));
+      .catch(console.error);
   }, []);
 
-  const addRecipe = async (recipe) => {
+  const addRecipe = (recipe) => {
+    setRecipes(prev => [...prev, recipe]);
+  };
+
+  const handleDelete = async (id) => {
+    await fetch(`http://localhost:5000/api/recipes/${id}`, { method: 'DELETE' });
+    setRecipes(prev => prev.filter(r => r._id !== id));
+  };
+
+  const handleUpdate = async (updatedRecipe) => {
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
+      const response = await fetch(`http://localhost:5000/api/recipes/${updatedRecipe._id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(recipe),
+        body: JSON.stringify(updatedRecipe),
       });
 
-      if (!res.ok) throw new Error('Failed to add recipe');
+      if (!response.ok) throw new Error('Failed to update recipe');
 
-      const savedRecipe = await res.json();
-      setRecipes([...recipes, savedRecipe]);
+      const data = await response.json();
+
+      setRecipes(prev =>
+        prev.map(r => (r._id === data._id ? data : r))
+      );
+      setEditingId(null); // exit edit mode after success
     } catch (error) {
-      console.error('Add recipe error:', error);
+      console.error('Update error:', error);
+      alert('Failed to update recipe. Please try again.');
     }
   };
 
-  const deleteRecipe = async (id) => {
-    try {
-      const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        setRecipes(prev => prev.filter(recipe => recipe._id !== id));
-      } else {
-        throw new Error('Failed to delete recipe');
-      }
-    } catch (error) {
-      console.error('Delete error:', error);
-    }
+  const handleEdit = (id) => {
+    setEditingId(id);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
   };
 
   return (
@@ -53,7 +61,14 @@ export default function App() {
           <AddRecipe onAdd={addRecipe} />
         </div>
         <div className="w-2/3 h-[80vh] overflow-y-auto">
-          <RecipeList recipes={recipes} onDelete={deleteRecipe} />
+          <RecipeList
+            recipes={recipes}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+            onEdit={handleEdit}
+            editingId={editingId}
+            onCancelEdit={handleCancelEdit}
+          />
         </div>
       </div>
     </div>
