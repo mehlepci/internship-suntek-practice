@@ -41,58 +41,73 @@ export default function EditRecipeForm({ recipe, onSave, onCancel }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex gap-4 p-4 bg-white rounded shadow-md max-w-full"
-      style={{ minWidth: '600px' }}
+      className="bg-white rounded-lg shadow-md p-6 mb-6 grid md:grid-cols-2 gap-6 min-h-[320px]"
     >
-      <div className="flex flex-col w-1/3">
-        <label className="mb-1 font-semibold">Title</label>
+      {/* Left side: Title + Photo */}
+      <div className="flex flex-col">
+        <label className="mb-2 font-semibold">Title:</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="border rounded px-2 py-1"
-          required
+          className="border rounded px-3 py-2 mb-4"
+          placeholder="Recipe title"
         />
-        <label className="mt-3 mb-1 font-semibold">Photo URL</label>
+        <label className="mb-2 font-semibold">Photo URL:</label>
         <input
           type="text"
           value={photo}
           onChange={(e) => setPhoto(e.target.value)}
-          className="border rounded px-2 py-1"
+          className="border rounded px-3 py-2 mb-4"
+          placeholder="Photo URL"
         />
         {photo && (
-          <img src={photo} alt={title} className="mt-2 rounded max-h-40 object-cover" />
+          <img
+            src={photo}
+            alt={title}
+            className="mt-auto rounded max-w-full object-cover"
+            style={{ maxHeight: '180px' }}
+          />
         )}
       </div>
 
-      <div className="flex flex-col flex-grow">
-        <label className="mb-1 font-semibold">Ingredients</label>
+      {/* Right side: Ingredients and Instructions */}
+      <div className="flex flex-col justify-between">
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label className="mb-2 font-semibold block">Ingredients:</label>
         <textarea
           value={ingredients}
           onChange={(e) => setIngredients(e.target.value)}
-          className="border rounded px-2 py-1 h-32 resize-none"
-          required
+              rows={8}
+              className="border rounded px-3 py-2 w-full resize-none"
+              placeholder="List ingredients here"
         />
-
-        <label className="mt-3 mb-1 font-semibold">Instructions</label>
+          </div>
+          <div>
+            <label className="mb-2 font-semibold block">Instructions:</label>
         <textarea
           value={instructions}
           onChange={(e) => setInstructions(e.target.value)}
-          className="border rounded px-2 py-1 h-32 resize-none"
-          required
+              rows={8}
+              className="border rounded px-3 py-2 w-full resize-none"
+              placeholder="Write instructions here"
         />
+          </div>
+        </div>
 
-        <div className="mt-4 flex gap-2">
+        {/* Buttons */}
+        <div className="flex justify-between">
           <button
             type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
             Save
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="bg-gray-400 text-black px-4 py-2 rounded hover:bg-gray-500"
+            className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
           >
             Cancel
           </button>
