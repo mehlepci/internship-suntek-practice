@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 export default function EditRecipeForm({ recipe, onSave, onCancel }) {
   const [title, setTitle] = useState(recipe.title);
-  const [ingredients, setIngredients] = useState(recipe.ingredients);
-  const [instructions, setInstructions] = useState(recipe.instructions);
-  const [photo, setPhoto] = useState(recipe.photo);
+  const [ingredients, setIngredients] = useState(recipe.ingredients || '');
+  const [instructions, setInstructions] = useState(recipe.instructions || '');
+  const [photo, setPhoto] = useState(recipe.photo || '');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
